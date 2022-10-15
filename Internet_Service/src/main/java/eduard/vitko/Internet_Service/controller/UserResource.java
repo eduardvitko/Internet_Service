@@ -5,11 +5,13 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.security.auth.UserPrincipal;
 import eduard.vitko.Internet_Service.domain.Role;
 import eduard.vitko.Internet_Service.domain.User;
 import eduard.vitko.Internet_Service.services.UserService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MimeTypeUtils;
@@ -28,12 +30,14 @@ import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class UserResource {
     private final UserService userService;
+
 
     @GetMapping("/users")
     public ResponseEntity<List<User>> getUsers() {
