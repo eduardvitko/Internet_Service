@@ -33,7 +33,7 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserResource {
     private final UserService userService;
