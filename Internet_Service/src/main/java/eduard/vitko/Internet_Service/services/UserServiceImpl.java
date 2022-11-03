@@ -31,11 +31,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
         if(user == null) {
-            log.error("User not found in the database");
+            log.error("User not found in the my database");
             throw new UsernameNotFoundException("User not found in the database");
         } else {
             log.info("User found in the database: {}", username);
-            Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+            List<SimpleGrantedAuthority> authorities = new ArrayList<>();
             user.getRoles().forEach(role -> {
                 authorities.add(new SimpleGrantedAuthority(role.getName()));
             });
@@ -46,8 +46,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public User saveUser(User user) {
         log.info("Saving new user {} to the database", user.getName());
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+        User userNew = new User();
+        userNew.setName(user.getName());
+        userNew.setUsername(user.getUsername());
+        userNew.setPassword(passwordEncoder.encode(user.getPassword()));
+        Role role = roleRepository.findByName("ROLE_USER");
+        ArrayList<Role> roles = new ArrayList<>();
+        roles.add(role);
+        userNew.setRoles(roles);
+        return userRepository.save(userNew);
     }
 
     @Override
@@ -67,7 +74,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public User getUser(String username) {
         log.info("Fetching user {}", username);
-        return userRepository.findByUsername(username);
+        User findUser = userRepository.findByUsername(username);
+        if (findUser == null) {
+            log.error("User not found is Database");
+        }
+        return findUser;
     }
 
     @Override
