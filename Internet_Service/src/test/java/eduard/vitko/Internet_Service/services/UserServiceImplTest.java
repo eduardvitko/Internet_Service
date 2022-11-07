@@ -1,12 +1,13 @@
 package eduard.vitko.Internet_Service.services;
 
-import eduard.vitko.Internet_Service.domain.Role;
-import eduard.vitko.Internet_Service.domain.User;
+import eduard.vitko.Internet_Service.domain.*;
 import eduard.vitko.Internet_Service.repositories.RoleRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.annotation.Resource;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -24,12 +25,15 @@ class UserServiceImplTest {
     }
 
     @Test
-    void saveUser() {
-        User user = new User();
-        user.setName("Marina");
-        user.setUsername("Marina");
-        user.setPassword("2012");
-        userService.saveUser(user);
+    void registerUser() {
+        UserRegisterDto user = new UserRegisterDto();
+        user.setFirstName("Eduard");
+        user.setLastName("Vitko");
+        user.setUsername("Edik");
+        user.setPassword("1980");
+        user.setPhone("+380507097311");
+        user.setEmail("edik@gmail.com");
+        userService.registerUser(user);
 
     }
 
@@ -55,6 +59,8 @@ class UserServiceImplTest {
 
     @Test
     void getUsers() {
+        List<UserDto> userDtos = userService.getUsers();
+        assertEquals(3,3);
     }
 
 }

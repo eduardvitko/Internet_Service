@@ -5,21 +5,19 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.security.auth.UserPrincipal;
 import eduard.vitko.Internet_Service.domain.Role;
 import eduard.vitko.Internet_Service.domain.User;
+import eduard.vitko.Internet_Service.domain.UserDto;
+import eduard.vitko.Internet_Service.domain.UserRegisterDto;
 import eduard.vitko.Internet_Service.services.UserService;
 import eduard.vitko.Internet_Service.services.UserServiceImpl;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.MimeTypeUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -32,7 +30,6 @@ import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
-import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequestMapping("/user")
@@ -41,10 +38,10 @@ public class UserResource {
 
     private final UserService userService;
 
-@Resource
-private UserServiceImpl userServiceImpl;
+    private final UserServiceImpl userServiceImpl;
+
     @GetMapping("/users")
-    public ResponseEntity<List<User>> getUsers() {
+    public ResponseEntity<List<UserDto>> getUsers() {
         return ResponseEntity.ok().body(userServiceImpl.getUsers());
     }
 
@@ -52,25 +49,23 @@ private UserServiceImpl userServiceImpl;
     public ResponseEntity<User> findCustomerByPhoneNumber(@RequestParam("username") String username) {
         return ResponseEntity.ok(userServiceImpl.getUser(username));
     }
+
     @PostMapping("/user/save")
-    public ResponseEntity<User>saveUser(@RequestBody User user) {
-//        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/user/user/save").toUriString());
-//        return ResponseEntity.created(uri).body(userService.saveUser(user));
-      return ResponseEntity.ok(userServiceImpl.saveUser(user));
+    public ResponseEntity<User> registerUser(@RequestBody UserRegisterDto userRegisterDto) {
+        return ResponseEntity.ok(userServiceImpl.registerUser(userRegisterDto));
     }
 
     @PostMapping("/role/save")
-    public ResponseEntity<Role>saveRole(@RequestBody Role role) {
+    public ResponseEntity<Role> saveRole(@RequestBody Role role) {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/user/role/save").toUriString());
         return ResponseEntity.created(uri).body(userService.saveRole(role));
     }
 
 
-
     @GetMapping("/token/refresh")
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String authorizationHeader = request.getHeader(AUTHORIZATION);
-        if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             try {
                 String refresh_token = authorizationHeader.substring("Bearer ".length());
                 Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
@@ -89,7 +84,7 @@ private UserServiceImpl userServiceImpl;
                 tokens.put("refresh_token", refresh_token);
                 response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                 new ObjectMapper().writeValue(response.getOutputStream(), tokens);
-            }catch (Exception exception) {
+            } catch (Exception exception) {
                 response.setHeader("error", exception.getMessage());
                 response.setStatus(FORBIDDEN.value());
                 //response.sendError(FORBIDDEN.value());

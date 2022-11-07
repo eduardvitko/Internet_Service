@@ -20,9 +20,14 @@ public class User {
     @Id
     @GeneratedValue(strategy = AUTO)
     private Long id;
-    private String name;
+    private String firstName;
+    private String lastName;
     private String username;
     private String password;
+    private String phone;
+    private String email;
+    private boolean isActive;
+    private double balance;
 
     @ManyToMany(cascade= CascadeType.ALL,fetch=FetchType.EAGER)
     @JoinTable(name="user_roles", joinColumns = {@JoinColumn(name="user_id", referencedColumnName="id")},

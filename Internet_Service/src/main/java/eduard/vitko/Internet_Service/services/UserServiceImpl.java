@@ -2,6 +2,9 @@ package eduard.vitko.Internet_Service.services;
 
 import eduard.vitko.Internet_Service.domain.Role;
 import eduard.vitko.Internet_Service.domain.User;
+import eduard.vitko.Internet_Service.domain.UserDto;
+import eduard.vitko.Internet_Service.domain.UserRegisterDto;
+import eduard.vitko.Internet_Service.mapper.BusinessMapper;
 import eduard.vitko.Internet_Service.repositories.RoleRepository;
 import eduard.vitko.Internet_Service.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -26,6 +28,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final BusinessMapper businessMapper;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -44,12 +47,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User saveUser(User user) {
-        log.info("Saving new user {} to the database", user.getName());
+    public User registerUser(UserRegisterDto userRegisterDto) {
+        log.info("Saving new user {} to the database", userRegisterDto.getUsername());
         User userNew = new User();
-        userNew.setName(user.getName());
-        userNew.setUsername(user.getUsername());
-        userNew.setPassword(passwordEncoder.encode(user.getPassword()));
+        userNew.setFirstName(userRegisterDto.getFirstName());
+        userNew.setLastName(userRegisterDto.getLastName());
+        userNew.setUsername(userRegisterDto.getUsername());
+        userNew.setPassword(passwordEncoder.encode(userRegisterDto.getPassword()));
+        userNew.setPhone(userRegisterDto.getPhone());
+        userNew.setEmail(userRegisterDto.getEmail());
         Role role = roleRepository.findByName("ROLE_USER");
         ArrayList<Role> roles = new ArrayList<>();
         roles.add(role);
@@ -82,8 +88,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public List<User> getUsers() {
+    public List<UserDto> getUsers() {
         log.info("Fetching all users");
-        return userRepository.findAll();
+        List<User> users = userRepository.findAll();
+        List<UserDto> dtoList = businessMapper.userDtoList(users);
+        return dtoList;
     }
 }
