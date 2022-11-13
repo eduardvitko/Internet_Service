@@ -26,7 +26,9 @@ public class User {
     private String lastName;
     private String username;
     private String password;
+
     @Pattern(regexp = "^((\\+380)\\d{9}$)")
+    @Column(unique = true,nullable = false,updatable = false)
     private String phone;
     private String email;
     private boolean isActive;
