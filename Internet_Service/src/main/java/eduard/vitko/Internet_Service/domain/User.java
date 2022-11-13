@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -24,6 +26,7 @@ public class User {
     private String lastName;
     private String username;
     private String password;
+    @Pattern(regexp = "^((\\+380)\\d{9}$)")
     private String phone;
     private String email;
     private boolean isActive;

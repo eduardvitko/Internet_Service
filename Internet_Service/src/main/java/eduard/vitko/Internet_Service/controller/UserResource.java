@@ -51,7 +51,7 @@ public class UserResource {
     }
 
     @PostMapping("/user/save")
-    public ResponseEntity<User> registerUser(@RequestBody UserRegisterDto userRegisterDto) {
+    public ResponseEntity<UserDto> registerUser(@RequestBody UserRegisterDto userRegisterDto) {
         return ResponseEntity.ok(userServiceImpl.registerUser(userRegisterDto));
     }
 

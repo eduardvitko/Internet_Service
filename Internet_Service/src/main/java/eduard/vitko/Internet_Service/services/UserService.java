@@ -8,7 +8,7 @@ import eduard.vitko.Internet_Service.domain.UserRegisterDto;
 import java.util.List;
 
 public interface UserService {
-    User registerUser(UserRegisterDto registerDto);
+    UserDto registerUser(UserRegisterDto registerDto);
     Role saveRole(Role role);
     void addRoleToUser(String username, String roleName);
     User getUser(String username);

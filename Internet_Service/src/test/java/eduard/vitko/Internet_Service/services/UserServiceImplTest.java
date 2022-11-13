@@ -1,6 +1,7 @@
 package eduard.vitko.Internet_Service.services;
 
 import eduard.vitko.Internet_Service.domain.*;
+import eduard.vitko.Internet_Service.mapper.BusinessMapper;
 import eduard.vitko.Internet_Service.repositories.RoleRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,6 +21,10 @@ class UserServiceImplTest {
     private UserServiceImpl userService;
     @Resource
     private RoleRepository roleRepository;
+
+    @Resource
+    private BusinessMapper mapper;
+
     @Test
     void loadUserByUsername() {
     }
@@ -27,14 +32,13 @@ class UserServiceImplTest {
     @Test
     void registerUser() {
         UserRegisterDto user = new UserRegisterDto();
-        user.setFirstName("Eduard");
-        user.setLastName("Vitko");
-        user.setUsername("Edik");
-        user.setPassword("1980");
-        user.setPhone("+380507097311");
-        user.setEmail("edik@gmail.com");
-        userService.registerUser(user);
-
+        user.setFirstName("hhhh");
+        user.setLastName("ddd");
+        user.setUsername("mmmm");
+        user.setPassword("3698");
+        user.setPhone("+380632225800");
+        user.setEmail("nmn@gmail.com");
+        UserDto newUser =  userService.registerUser(user);
     }
 
     @Test

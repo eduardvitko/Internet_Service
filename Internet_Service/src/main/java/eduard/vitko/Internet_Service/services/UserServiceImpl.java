@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public User registerUser(UserRegisterDto userRegisterDto) {
+    public UserDto registerUser(UserRegisterDto userRegisterDto) {
         log.info("Saving new user {} to the database", userRegisterDto.getUsername());
         User userNew = new User();
         userNew.setFirstName(userRegisterDto.getFirstName());
@@ -60,7 +60,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         ArrayList<Role> roles = new ArrayList<>();
         roles.add(role);
         userNew.setRoles(roles);
-        return userRepository.save(userNew);
+        User user = userRepository.save(userNew);
+        return businessMapper.convertToUserDto(user);
     }
 
     @Override
