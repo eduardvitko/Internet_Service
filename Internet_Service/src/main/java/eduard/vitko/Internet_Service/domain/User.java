@@ -30,6 +30,8 @@ public class User {
     @Pattern(regexp = "^((\\+380)\\d{9}$)")
     @Column(unique = true,nullable = false,updatable = false)
     private String phone;
+
+    @Column(unique = true,nullable = false,updatable = false)
     private String email;
     private boolean isActive;
     private double balance;
